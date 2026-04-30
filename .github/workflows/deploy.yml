@@ -8,6 +8,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
@@ -24,13 +26,12 @@ jobs:
       - name: Build static site
         run: npm run build
 
-      - name: Deploy to Hostinger via SFTP
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-        with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: 22
-          local_path: './out/*'
-          remote_path: '/home/u899730117/public_html'
-          sftpArgs: '-o ConnectTimeout=10 -o StrictHostKeyChecking=no'
+      - name: Push built files to deploy branch
+        run: |
+          cd out
+          git init
+          git config user.email "rjtshrma11@gmail.com"
+          git config user.name "Rajat"
+          git add -A
+          git commit -m "deploy: built static site $(date +'%Y-%m-%d %H:%M:%S')"
+          git push --force https://Rajatsg13:${{ secrets.GITHUB_TOKEN }}@github.com/Rajatsg13/toolsite.git HEAD:deploy
