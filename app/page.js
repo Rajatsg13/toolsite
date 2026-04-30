@@ -8,9 +8,14 @@ export const metadata = {
 const pdfTools = [
   { icon: '📄', title: 'PDF to Word', description: 'Convert PDF files to editable Word documents instantly.', href: '/pdf-to-word', badge: 'Popular' },
   { icon: '📝', title: 'Word to PDF', description: 'Convert Word (.docx) files to PDF format online.', href: '/word-to-pdf' },
-  { icon: '🖼️', title: 'Image to PDF', description: 'Convert JPG, PNG images into a PDF file easily.', href: '/image-to-pdf', badge: 'Popular' },
   { icon: '🔗', title: 'Merge PDF', description: 'Combine multiple PDF files into a single document.', href: '/pdf-merge' },
+  { icon: '✂️', title: 'Split PDF', description: 'Split a PDF into pages or custom page ranges.', href: '/pdf-split', badge: 'New' },
   { icon: '🗜️', title: 'Compress PDF', description: 'Reduce PDF file size without losing quality.', href: '/pdf-compress' },
+];
+
+const imageTools = [
+  { icon: '🖼️', title: 'Image to PDF', description: 'Convert JPG, PNG images into a PDF file easily.', href: '/image-to-pdf', badge: 'Popular' },
+  { icon: '📐', title: 'Image Resizer', description: 'Resize JPG, PNG or WebP to any size. Change format & quality.', href: '/image-resize', badge: 'New' },
 ];
 
 const calculators = [
@@ -22,7 +27,7 @@ const calculators = [
 ];
 
 const stats = [
-  { value: '10+', label: 'Free Tools' },
+  { value: '12+', label: 'Free Tools' },
   { value: '0', label: 'Signup Required' },
   { value: '100%', label: 'Browser-Based' },
   { value: '∞', label: 'Free Forever' },
@@ -88,6 +93,20 @@ export default function HomePage() {
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {calculators.map(t => <ToolCard key={t.href} {...t} />)}
+        </div>
+      </section>
+
+      {/* Image Tools */}
+      <section className="max-w-7xl mx-auto px-4 pt-10 pb-4">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-lg">🖼️</div>
+          <div>
+            <h2 className="text-xl font-bold text-slate-800">Image Tools</h2>
+            <p className="text-sm text-slate-500">Convert and resize images in your browser</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          {imageTools.map(t => <ToolCard key={t.href} {...t} />)}
         </div>
       </section>
 

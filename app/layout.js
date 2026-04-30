@@ -11,6 +11,11 @@ export const metadata = {
   description: 'Free online tools for everyone — PDF converter, EMI calculator, SIP calculator, image resizer, JSON validator and more. No login required.',
   keywords: ['free online tools', 'pdf converter', 'emi calculator', 'sip calculator', 'image resizer', 'json validator'],
   authors: [{ name: 'TechSolve44' }],
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_IN',
@@ -27,6 +32,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>

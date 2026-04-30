@@ -28,10 +28,25 @@ jobs:
 
       - name: Push built files to deploy branch
         run: |
-          cd out
-          git init
           git config user.email "rjtshrma11@gmail.com"
           git config user.name "Rajat"
+
+          # Fetch existing deploy branch (ignore error if it doesn't exist yet)
+          git fetch origin deploy || true
+
+          # Switch to deploy branch, or create it as an orphan
+          git checkout deploy 2>/dev/null || git checkout --orphan deploy
+
+          # Remove all tracked files cleanly
+          git rm -rf . --quiet 2>/dev/null || true
+
+          # Copy the built static files into the root
+          cp -r out/. .
+
+          # Add and commit
           git add -A
-          git commit -m "deploy: built static site $(date +'%Y-%m-%d %H:%M:%S')"
-          git push --force https://Rajatsg13:${{ secrets.GITHUB_TOKEN }}@github.com/Rajatsg13/toolsite.git HEAD:deploy
+          git diff --staged --quiet && echo "No changes to deploy" && exit 0
+          git commit -m "deploy: $(date +'%Y-%m-%d %H:%M:%S')"
+
+          # Normal push — Hostinger's git pull will now work correctly
+          git push https://Rajatsg13:${{ secrets.GITHUB_TOKEN }}@github.com/Rajatsg13/toolsite.git deploy

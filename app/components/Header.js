@@ -7,10 +7,17 @@ const navGroups = [
     label: 'PDF Tools',
     items: [
       { label: '🔗 Merge PDF',        href: '/pdf-merge' },
+      { label: '✂️ Split PDF',        href: '/pdf-split' },
       { label: '🗜️ Compress PDF',     href: '/pdf-compress' },
       { label: '📄 PDF to Word',      href: '/pdf-to-word' },
       { label: '📝 Word to PDF',      href: '/word-to-pdf' },
+    ],
+  },
+  {
+    label: 'Image Tools',
+    items: [
       { label: '🖼️ Image to PDF',     href: '/image-to-pdf' },
+      { label: '📐 Image Resizer',    href: '/image-resize' },
     ],
   },
   {
@@ -39,9 +46,9 @@ function DropdownMenu({ group, onClose }) {
 }
 
 export default function Header() {
-  const [menuOpen, setMenuOpen]   = useState(false);
-  const [openGroup, setOpenGroup] = useState(null);   // desktop hover
-  const [mobileOpen, setMobileOpen] = useState(null); // mobile accordion index
+  const [menuOpen, setMenuOpen]     = useState(false);
+  const [openGroup, setOpenGroup]   = useState(null);
+  const [mobileOpen, setMobileOpen] = useState(null);
   const timerRef = useRef(null);
 
   useEffect(() => () => clearTimeout(timerRef.current), []);
@@ -53,7 +60,6 @@ export default function Header() {
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
 
-        {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
           <div className="w-9 h-9 rounded-lg bg-brand-700 flex items-center justify-center text-white font-black text-lg">T</div>
           <span className="font-bold text-xl text-brand-800 group-hover:text-brand-600 transition-colors">
@@ -99,7 +105,6 @@ export default function Header() {
         <div className="md:hidden bg-white border-t border-slate-100 px-4 pb-4">
           {navGroups.map((group, idx) => (
             <div key={group.label} className="border-b border-slate-100">
-              {/* Accordion header */}
               <button
                 className="w-full flex items-center justify-between py-3 text-sm font-semibold text-slate-700"
                 onClick={() => setMobileOpen(mobileOpen === idx ? null : idx)}>
@@ -109,7 +114,6 @@ export default function Header() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-              {/* Accordion items */}
               {mobileOpen === idx && (
                 <div className="pl-3 pb-3 space-y-1">
                   {group.items.map(item => (
