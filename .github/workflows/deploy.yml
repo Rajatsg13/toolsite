@@ -27,26 +27,32 @@ jobs:
         run: npm run build
 
       - name: Push built files to deploy branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.email "rjtshrma11@gmail.com"
           git config user.name "Rajat"
 
-          # Fetch existing deploy branch (ignore error if it doesn't exist yet)
-          git fetch origin deploy || true
+          cd out
 
-          # Switch to deploy branch, or create it as an orphan
-          git checkout deploy 2>/dev/null || git checkout --orphan deploy
+          # Init a fresh repo — only static files, no node_modules/.next
+          git init
+          git remote add origin https://Rajatsg13:${GITHUB_TOKEN}@github.com/Rajatsg13/toolsite.git
 
-          # Remove all tracked files cleanly
-          git rm -rf . --quiet 2>/dev/null || true
+          # Fetch existing deploy branch so we can use it as parent (fast-forward, not force)
+          git fetch origin deploy --depth=1 2>/dev/null || true
 
-          # Copy the built static files into the root
-          cp -r out/. .
-
-          # Add and commit
+          # Stage all built files
           git add -A
-          git diff --staged --quiet && echo "No changes to deploy" && exit 0
-          git commit -m "deploy: $(date +'%Y-%m-%d %H:%M:%S')"
 
-          # Normal push — Hostinger's git pull will now work correctly
-          git push https://Rajatsg13:${{ secrets.GITHUB_TOKEN }}@github.com/Rajatsg13/toolsite.git deploy
+          if git rev-parse --verify FETCH_HEAD 2>/dev/null; then
+            # Build a commit on top of the existing deploy history → fast-forward push
+            PARENT=$(git rev-parse FETCH_HEAD)
+            TREE=$(git write-tree)
+            COMMIT=$(git commit-tree "$TREE" -p "$PARENT" -m "deploy: $(date +'%Y-%m-%d %H:%M:%S')")
+            git push origin "${COMMIT}:refs/heads/deploy"
+          else
+            # First ever deploy — orphan commit
+            git commit -m "deploy: $(date +'%Y-%m-%d %H:%M:%S')"
+            git push origin HEAD:deploy
+          fi
