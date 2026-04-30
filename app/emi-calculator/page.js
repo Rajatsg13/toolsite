@@ -2,7 +2,6 @@
 import { useState, useMemo } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
-export const metadata = undefined; // client component
 
 const fmt = (n) => '₹' + Math.round(n).toLocaleString('en-IN');
 
