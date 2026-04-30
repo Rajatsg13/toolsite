@@ -3,7 +3,7 @@ name: Build & Deploy to Hostinger
 on:
   push:
     branches:
-      - main   # Runs every time you push to main
+      - main
 
 jobs:
   deploy:
@@ -17,21 +17,20 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          
 
       - name: Install dependencies
         run: npm install
 
       - name: Build static site
         run: npm run build
-        # This generates the ./out folder with all static HTML/CSS/JS
 
-      - name: Deploy to Hostinger via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Deploy to Hostinger via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./out/          # Upload the static build
-          server-dir: /public_html/  # Your Hostinger web root
-          dangerous-clean-slate: false
+          port: 22
+          local_path: './out/*'
+          remote_path: '/public_html'
+          sftpArgs: '-o ConnectTimeout=10 -o StrictHostKeyChecking=no'
