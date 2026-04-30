@@ -2,6 +2,7 @@
 import { useState, useMemo } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
+export const metadata = undefined; // client component
 
 const fmt = (n) => '₹' + Math.round(n).toLocaleString('en-IN');
 
@@ -49,7 +50,8 @@ export default function EMICalculator() {
             <div className="flex justify-between text-xs text-slate-400 mt-1">
               <span>₹50K</span><span>₹1Cr</span>
             </div>
-            <input type="number" value={principal} onChange={e => setPrincipal(+e.target.value)}
+            <input type="text" inputMode="numeric" value={principal}
+              onChange={e => { const v = parseInt(e.target.value.replace(/[^0-9]/g, ''), 10); if (!isNaN(v)) setPrincipal(Math.min(10000000, v)); }}
               className="mt-2 w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" />
           </div>
 

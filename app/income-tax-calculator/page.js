@@ -82,7 +82,8 @@ export default function IncomeTaxCalculator() {
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-5">
           <div>
             <label className="text-sm font-semibold text-slate-700 block mb-2">Annual Income (Gross)</label>
-            <input type="number" value={income} onChange={e => setIncome(+e.target.value)}
+            <input type="text" inputMode="numeric" value={income}
+              onChange={e => { const v = parseInt(e.target.value.replace(/[^0-9]/g, ''), 10); if (!isNaN(v)) setIncome(Math.min(5000000, v)); }}
               className="w-full border border-slate-200 rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" />
             <input type="range" min="100000" max="5000000" step="10000" value={income}
               onChange={e => setIncome(+e.target.value)} className="mt-2" />
@@ -92,7 +93,8 @@ export default function IncomeTaxCalculator() {
           {regime === 'old' && (
             <div>
               <label className="text-sm font-semibold text-slate-700 block mb-2">Total Deductions (80C, HRA, etc.)</label>
-              <input type="number" value={deductions} onChange={e => setDeductions(+e.target.value)}
+              <input type="text" inputMode="numeric" value={deductions}
+                onChange={e => { const v = parseInt(e.target.value.replace(/[^0-9]/g, ''), 10); if (!isNaN(v)) setDeductions(v); }}
                 className="w-full border border-slate-200 rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" />
               <p className="text-xs text-slate-400 mt-1">80C max: ₹1,50,000 | 80D, HRA, LTA etc. also applicable</p>
             </div>
